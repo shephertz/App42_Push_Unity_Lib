@@ -9,13 +9,13 @@ App42_Push_Unity_Lib
 # Building Project Files
 
 1. First download this library project from [here] (https://github.com/shephertz/App42_Push_Unity_Lib/archive/master.zip)
-2. Import Face-Book SDK project in you eclipse and make it library project.
-3. Now You have to find you package name of Unity 3D game , to do this follow these steps.
+2. Import this project in your eclipse (make it library project if its not set).
+3. Now You have to find you package name of Unity 3D game ,follow these steps.
 
 ```
 A. Open Build Settings from File option (use Ctrl+Shift+B from keyboard).
 B. Select Player Settings option.
-C. Now player Settings popUp open than Select Other Settings option in it.
+C. Select Other Settings option in Player Settings PopUp.
 D. Change the Bundle Identifier with your game package name.
 ```
 4.&nbsp; Chnage\Refactor the package name of android library project source with you game package name.<br/>
