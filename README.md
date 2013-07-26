@@ -1,18 +1,18 @@
 App42_Push_Unity_Lib
 ====================
 
-# About Library Sample
+# About Library Project
 
-1. This Library Sample project is used to get PushNotification in our Unity 3D android game.
-2. This is used to generate a jar file with coreesponding android package name of your Unity android game.
+1. App42 Push Notification Library Project for Unity Plugin.
 
-# Building Project Files
 
-1. First download this library project from [here] (https://github.com/shephertz/App42_Push_Unity_Lib/archive/master.zip)
+# Building Project 
+
+1. Download this library project from [here] (https://github.com/shephertz/App42_Push_Unity_Lib/archive/master.zip)
 2. Import this project in your eclipse (make it library project if its not set).
-3. Now You have to find you package name of Unity 3D game ,follow these steps.
-4. Chnage\Refactor the package name of android library project source with you game package name.
-5. Also Replace all previous package name with your package name in AndroidManifest.xml file.
-6. Build your library project.<br/>
-7. Copy App42PushService.jar and AndroidManifest.xml file from your bin folder of library Project.
-8. Replace/paste it into Assets\plugins\Android your Unity Gaming Project.
+4. Change\Refactor the package name of android library project source with your desired game package name. Default pacakge name of this library project is com.shephertz.app42.android.pushservice . 
+5. While refactoring package name select `Update fully qualified names in non-Java text files (Forces Preview)` option. This will modify AndroidManifest.xml file too with new package name.
+5. Cross check AndroidManifest.xml file for changes in pacakage name, if not done, do it manually.
+6. Build your library project.
+7. Copy App42PushService.jar and AndroidManifest.xml file from your bin folder of library Project folder and replace/paste it into Assets\plugins\Android of your Unity project.
+
