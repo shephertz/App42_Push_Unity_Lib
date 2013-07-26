@@ -1,9 +1,8 @@
 App42_Push_Unity_Lib
 ====================
 
-# About Library Project
-
-1. App42 Push Notification Library Project for Unity Plugin.
+ 
+App42 Push Notification Library Project for Unity Plugin.
 
 
 # Building Project 
