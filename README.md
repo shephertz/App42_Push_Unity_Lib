@@ -11,16 +11,8 @@ App42_Push_Unity_Lib
 1. First download this library project from [here] (https://github.com/shephertz/App42_Push_Unity_Lib/archive/master.zip)
 2. Import this project in your eclipse (make it library project if its not set).
 3. Now You have to find you package name of Unity 3D game ,follow these steps.
-
-```
-A. Open Build Settings from File option (use Ctrl+Shift+B from keyboard).
-B. Select Player Settings option.
-C. Select Other Settings option in Player Settings PopUp.
-D. Change the Bundle Identifier with your game package name.
-```
-4.&nbsp; Chnage\Refactor the package name of android library project source with you game package name.<br/>
-5.&nbsp; Also Replace all previous package name with your package name in AndroidManifest.xml file.<br/>
-6.&nbsp; Add this library project into your sample android application.<br/>
-7.&nbsp; Build your library project.<br/>
-8.&nbsp; Copy App42PushService.jar and AndroidManifest.xml file from your bin folder of library Project.<br/>
-9.&nbsp; Replace/paste it into Assets\plugins\Android your Unity Gaming Project.</br>
+4. Chnage\Refactor the package name of android library project source with you game package name.
+5. Also Replace all previous package name with your package name in AndroidManifest.xml file.
+6. Build your library project.<br/>
+7. Copy App42PushService.jar and AndroidManifest.xml file from your bin folder of library Project.
+8. Replace/paste it into Assets\plugins\Android your Unity Gaming Project.
