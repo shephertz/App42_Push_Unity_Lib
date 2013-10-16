@@ -126,6 +126,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		else{
 			    notification = new NotificationCompat.Builder(context)
 		        .setContentText(message)
+		        .setSmallIcon(android.R.drawable.ic_dialog_info)
 		         .setLargeIcon(bmp)
 		        .setWhen(when)
 		        .setLights(Color.YELLOW, 1, 2)
