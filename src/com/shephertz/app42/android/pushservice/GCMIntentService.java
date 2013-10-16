@@ -1,16 +1,27 @@
 package com.shephertz.app42.android.pushservice;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.android.gcm.GCMBaseIntentService;
 import com.shephertz.app42.paas.sdk.android.App42API;
 import com.shephertz.app42.paas.sdk.android.App42CallBack;
+import com.shephertz.app42.paas.sdk.android.App42Log;
 
 public class GCMIntentService extends GCMBaseIntentService {
 
@@ -50,12 +61,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		displayMessage(context, message);
 		generateNotification(context, message);
 		try{
-			String methodName = ServiceContext.instance(context).getCallBackMethod();
-			String gameObj = ServiceContext.instance(context).getGameObject();
-			Log.i(TAG, "Method Name " + methodName);
-			Log.i(TAG, "gameObj " + gameObj);
-			
-		App42PushActivity.messageReceived(message, ServiceContext.instance(context).getCallBackMethod(),
+		App42Service.messageReceived(message, ServiceContext.instance(context).getCallBackMethod(),
 				ServiceContext.instance(context).getGameObject());	
 		}
 		catch(Exception e){
@@ -108,12 +114,36 @@ public class GCMIntentService extends GCMBaseIntentService {
 	/**
 	 * Issues a notification to inform the user that server has sent a message.
 	 */
-	public static void generateNotification(Context context, String message) {
+	private  void generateNotification(Context context, String message) {
 		long when = System.currentTimeMillis();
 		NotificationManager notificationManager = (NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);
-		Notification notification = new Notification(android.R.drawable.stat_notify_sync,message,when);
-		Intent notificationIntent = new Intent(context, App42PushActivity.class);
+		Bitmap bmp=getBitmapFromAssets();
+		Notification notification ;
+		if(bmp==null){
+			notification= new Notification(android.R.drawable.ic_dialog_info,message,when);
+		}
+		else{
+			    notification = new NotificationCompat.Builder(context)
+		        .setContentText(message)
+		         .setLargeIcon(bmp)
+		        .setWhen(when)
+		        .setLights(Color.YELLOW, 1, 2)
+		        .build();
+		        
+		}
+		
+	
+		Intent notificationIntent;
+			try {
+				String activtyName=getActivtyName();
+				notificationIntent=new Intent(context, Class.forName(activtyName));
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				notificationIntent = new Intent();
+			}
+	
 		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
 				| Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		PendingIntent intent = PendingIntent.getActivity(context, 0,
@@ -122,6 +152,37 @@ public class GCMIntentService extends GCMBaseIntentService {
 		notification.flags |= Notification.FLAG_AUTO_CANCEL;
 		notificationManager.notify(0, notification);
 
+	}
+	
+	public Bitmap getBitmapFromAssets() {
+	    AssetManager assetManager = getAssets();
+
+	    InputStream istr;
+		try {
+			istr = assetManager.open("app_icon.png");
+			  Bitmap bitmap = BitmapFactory.decodeStream(istr);
+			  return bitmap;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	  
+
+	  
+	}
+	private String getActivtyName(){
+		  String activityName = null;
+		  ComponentName myService = new ComponentName(this, this.getClass());
+	        try {
+				Bundle data = getPackageManager().getServiceInfo(myService, PackageManager.GET_META_DATA).metaData;
+				App42Log.debug(" Message Activity Name : " + data.getString("onMessageOpen"));
+				activityName = data.getString("onMessageOpen");
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+	        return activityName;
 	}
 
 	/**

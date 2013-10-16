@@ -2,26 +2,33 @@ package com.shephertz.app42.android.pushservice;
 
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 
 import com.google.android.gcm.GCMRegistrar;
 import com.shephertz.app42.paas.sdk.android.App42API;
+import com.shephertz.app42.paas.sdk.android.App42CallBack;
 import com.shephertz.app42.paas.sdk.android.App42Exception;
-import com.shephertz.app42.paas.sdk.android.push.PushNotificationService;
+import com.unity3d.player.UnityPlayer;
 
 public class App42Service {
 
-	private PushNotificationService pushService;
 	private static App42Service mInstance = null;
-  
+	private Context mContext;
+	private ServiceContext serviceContext;
+
 	private App42Service(Context context) {
-		App42API.initialize(
-				context,
-				ServiceContext.instance(context).getApiKey(),
-				ServiceContext.instance(context).getSecretKey());
-				this.pushService = App42API.buildPushNotificationService();
+		setContext(context);
+		this.serviceContext = ServiceContext.instance(context);
 	}
 
-	
+	public Context getContext() {
+		return mContext;
+	}
+
+	public void setContext(Context context) {
+		this.mContext = context;
+	}
+
 	/*
 	 * instance of class
 	 */
@@ -30,7 +37,6 @@ public class App42Service {
 		if (mInstance == null) {
 			mInstance = new App42Service(coontext);
 		}
-
 		return mInstance;
 	}
 
@@ -41,19 +47,21 @@ public class App42Service {
 			@Override
 			public void run() {
 				try {
-					pushService.storeDeviceToken(userID, deviceId);
+					App42API.buildPushNotificationService().storeDeviceToken(userID, deviceId);
 					callerThreadHandler.post(new Runnable() {
 						@Override
 						public void run() {
-						App42PushActivity.messageReceived("Registration done with user "+userID,ServiceContext.instance(context).getCallBackMethod(),
-								ServiceContext.instance(context).getGameObject());
+							messageReceived(
+									"Registration done with user " + userID,
+									serviceContext.getCallBackMethod(),
+									serviceContext.getGameObject());
 						}
 					});
 				} catch (final App42Exception e) {
 					callerThreadHandler.post(new Runnable() {
 						@Override
 						public void run() {
-						
+
 						}
 					});
 
@@ -71,19 +79,63 @@ public class App42Service {
 		final String deviceId = GCMRegistrar.getRegistrationId(context);
 		if (deviceId.equals("")) {
 			try {
-				GCMRegistrar.register(context, ServiceContext.instance(context).getProjectNo());
-			}
-			catch (Exception e) {
+				GCMRegistrar.register(context, serviceContext.getProjectNo());
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		} else {
 			try {
 				regirsterPushOnApp42(context, userID, deviceId);
-			}
-			catch(Exception ex) {
+			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
 		}
 	}
-	
+
+	public static void messageReceived(String message, String method,
+			String gameObject) {
+		UnityPlayer.UnitySendMessage(gameObject, method, message);
+		messageOpenLog(message);
+		Log.i(" Message Sent : ", message);
+	}
+
+	private static void messageOpenLog(String message) {
+		App42API.buildLogService().setEvent("Message", "Open  " + message,
+				new App42CallBack() {
+
+					@Override
+					public void onSuccess(Object arg0) {
+						// TODO Auto-generated method stub
+					}
+
+					@Override
+					public void onException(Exception arg0) {
+						System.out.println(" onMessage  Exception : " + arg0);
+
+					}
+				});
+	}
+
+	public void setCurrentUser(String userId) {
+		serviceContext.saveApp42UserId(userId);
+	}
+
+	public void intialize(String apiKey, String secretKey) {
+		serviceContext.saveApiSecretKey(apiKey, secretKey);
+		App42API.initialize(getContext(), apiKey, secretKey);
+	}
+
+	public void setProjectNo(String projectNo) {
+		GCMIntentService.projectNo = projectNo;
+		serviceContext.saveProjectNo(projectNo);
+
+	}
+
+	public void registerForNotification(String callBackMethod,
+			String gameObjectName) {
+		serviceContext.saveUnityInfo(callBackMethod, gameObjectName);
+		registerForPushNotification(getContext(),
+				serviceContext.getApp42UserId());
+	}
+
 }

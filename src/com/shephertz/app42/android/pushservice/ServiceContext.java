@@ -8,6 +8,7 @@ public class ServiceContext {
 	private static ServiceContext mInstance = null;
 	SharedPreferences sharedPreference;
 
+
 	private ServiceContext(Context context) {
 		sharedPreference = context.getSharedPreferences(
 				ServiceConstants.AppName, context.MODE_PRIVATE);
