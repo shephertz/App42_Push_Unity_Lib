@@ -130,6 +130,14 @@ public class App42Service {
 		serviceContext.saveProjectNo(projectNo);
 
 	}
+	
+	/*
+	 * Call This Function from Unity after Message is shown on Unity Screen
+	 * This function reset PushMessage Count to zero
+	 */
+	public void resetCount(){
+		GCMIntentService.msgCount=0;
+	}
 
 	public void registerForNotification(String callBackMethod,
 			String gameObjectName) {
