@@ -1,7 +1,6 @@
 package com.shephertz.app42.android.pushservice;
 
 import android.content.Context;
-import android.os.Handler;
 import android.util.Log;
 
 import com.google.android.gcm.GCMRegistrar;
@@ -42,28 +41,19 @@ public class App42Service {
 
 	public void regirsterPushOnApp42(final Context context,
 			final String userID, final String deviceId) {
-		final Handler callerThreadHandler = new Handler();
 		new Thread() {
 			@Override
 			public void run() {
 				try {
-					App42API.buildPushNotificationService().storeDeviceToken(userID, deviceId);
-					callerThreadHandler.post(new Runnable() {
-						@Override
-						public void run() {
-							messageReceived(
-									"Registration done with user " + userID,
-									serviceContext.getCallBackMethod(),
-									serviceContext.getGameObject());
-						}
-					});
-				} catch (final App42Exception e) {
-					callerThreadHandler.post(new Runnable() {
-						@Override
-						public void run() {
+					App42API.buildPushNotificationService().storeDeviceToken(
+							userID, deviceId);
+					messageReceived("Registration done with user " + userID,
+							serviceContext.getCallBackMethod(),
+							serviceContext.getGameObject());
+					Log.d("App42", "Registration done with user " + userID);
 
-						}
-					});
+				} catch (App42Exception e) {
+					Log.e("App42", e.getMessage());
 
 				}
 			}
@@ -120,6 +110,10 @@ public class App42Service {
 		serviceContext.saveApp42UserId(userId);
 	}
 
+	public void setSessionId(String sessionId) {
+		App42API.setUserSessionId(sessionId);
+	}
+
 	public void intialize(String apiKey, String secretKey) {
 		serviceContext.saveApiSecretKey(apiKey, secretKey);
 		App42API.initialize(getContext(), apiKey, secretKey);
@@ -128,15 +122,14 @@ public class App42Service {
 	public void setProjectNo(String projectNo) {
 		GCMIntentService.projectNo = projectNo;
 		serviceContext.saveProjectNo(projectNo);
-
 	}
-	
+
 	/*
-	 * Call This Function from Unity after Message is shown on Unity Screen
-	 * This function reset PushMessage Count to zero
+	 * Call This Function from Unity after Message is shown on Unity Screen This
+	 * function reset PushMessage Count to zero
 	 */
-	public void resetCount(){
-		GCMIntentService.msgCount=0;
+	public void resetCount() {
+		GCMIntentService.msgCount = 0;
 	}
 
 	public void registerForNotification(String callBackMethod,
