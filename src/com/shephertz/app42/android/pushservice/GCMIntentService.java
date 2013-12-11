@@ -10,7 +10,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -20,9 +19,6 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.android.gcm.GCMBaseIntentService;
-import com.shephertz.app42.paas.sdk.android.App42API;
-import com.shephertz.app42.paas.sdk.android.App42CallBack;
-import com.shephertz.app42.paas.sdk.android.App42Log;
 
 public class GCMIntentService extends GCMBaseIntentService {
 
@@ -45,53 +41,20 @@ public class GCMIntentService extends GCMBaseIntentService {
 		Bundle b = intent.getExtras();
 		String message = (String) b.get("message");
 		Log.i(TAG, "Received message " + message);
-		App42API.buildLogService().setEvent("Message", "Delivered",
-				new App42CallBack() {
-
-					@Override
-					public void onSuccess(Object arg0) {
-						// TODO Auto-generated method stub
-					}
-
-					@Override
-					public void onException(Exception arg0) {
-						System.out.println(" onMessage  Exception : " + arg0);
-
-					}
-				});
-
 		notificationMessage = message;
 		displayMessage(context, message);
 		generateNotification(context, message);
 		try {
 			App42Service.messageReceived(message,
-					ServiceContext.instance(context).getCallBackMethod(),
+					ServiceContext.instance(context).getCallBackMessage(),
 					ServiceContext.instance(context).getGameObject());
 		} catch (Exception e) {
-			gameClosedLog(e.toString());
-			e.printStackTrace();
-		} catch (Error error) {
-			gameClosedLog(error.toString());
+		   Log.e("App42 Exception", e.getMessage());
 		}
 		// TODO: handle exception
 	}
 
-	private static void gameClosedLog(String exception) {
-		App42API.buildLogService().setEvent("Message",
-				"application is closed : " + exception, new App42CallBack() {
-
-					@Override
-					public void onSuccess(Object arg0) {
-						// TODO Auto-generated method stub
-					}
-
-					@Override
-					public void onException(Exception arg0) {
-						System.out.println(" onMessage  Exception : " + arg0);
-
-					}
-				});
-	}
+	
 
 	@Override
 	protected void onDeletedMessages(Context context, int total) {
@@ -105,9 +68,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 	protected void onRegistered(Context context, String registrationId) {
 
 		Log.i(TAG, "Device registered: regId = " + registrationId);
-		App42Service.instance(context).regirsterPushOnApp42(context,
-				ServiceContext.instance(context).getApp42UserId(),
-				registrationId);
+		App42Service.messageReceived(registrationId, ServiceContext.instance(context).getCallBackRegister(), 
+				ServiceContext.instance(context).getGameObject());
 
 	}
 
@@ -181,8 +143,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 		try {
 			Bundle data = getPackageManager().getServiceInfo(myService,
 					PackageManager.GET_META_DATA).metaData;
-			App42Log.debug(" Message Activity Name : "
-					+ data.getString("onMessageOpen"));
 			activityName = data.getString("onMessageOpen");
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block

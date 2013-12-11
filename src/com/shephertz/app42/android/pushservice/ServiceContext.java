@@ -23,60 +23,37 @@ public class ServiceContext {
 		}
 		return mInstance;
 	}
-
-	public String getApp42UserId() {
-		return sharedPreference.getString(ServiceConstants.KEY_USER, null);
+	public String getCallBackMessage() {
+		return sharedPreference.getString(ServiceConstants.KeyUnityMessage,
+				null);
 	}
-
-	public void saveApp42UserId(String app42UserId) {
-		SharedPreferences.Editor prefEditor = sharedPreference.edit();
-		prefEditor.putString(ServiceConstants.KEY_USER, app42UserId);
-		prefEditor.commit();
-	}
-
-	public String getApiKey() {
-		return sharedPreference.getString(ServiceConstants.KEY_API, null);
-	}
-
-	public void saveApiSecretKey(String apiKey, String secretKey) {
-		SharedPreferences.Editor prefEditor = sharedPreference.edit();
-		prefEditor.putString(ServiceConstants.KEY_API, apiKey);
-		prefEditor.putString(ServiceConstants.KEY_SECRET, secretKey);
-		prefEditor.commit();
-
-	}
-
-	public String getSecretKey() {
-
-		return sharedPreference.getString(ServiceConstants.KEY_SECRET, null);
-
-	}
-
-	public String getCallBackMethod() {
-		return sharedPreference.getString(ServiceConstants.KEY_UNITY_METHOD,
+	
+	public String getCallBackRegister() {
+		return sharedPreference.getString(ServiceConstants.KeyUnityRegistration,
 				null);
 	}
 
 	public String getGameObject() {
-		return sharedPreference.getString(ServiceConstants.KEY_GAME_OBJECT,
+		return sharedPreference.getString(ServiceConstants.KeyGameObject,
 				null);
 	}
 
-	public void saveUnityInfo(String callbackMethod, String gameObject) {
+	public void saveUnityInfo(String callBackMessage, String gameObject,String callBackRegister) {
 		SharedPreferences.Editor prefEditor = sharedPreference.edit();
-		prefEditor.putString(ServiceConstants.KEY_GAME_OBJECT, gameObject);
-		prefEditor.putString(ServiceConstants.KEY_UNITY_METHOD, callbackMethod);
+		prefEditor.putString(ServiceConstants.KeyGameObject, gameObject);
+		prefEditor.putString(ServiceConstants.KeyUnityMessage, callBackMessage);
+		prefEditor.putString(ServiceConstants.KeyUnityRegistration, callBackRegister);
 		prefEditor.commit();
 	}
 
 	public String getProjectNo() {
 		return sharedPreference
-				.getString(ServiceConstants.KEY_PROJECT_NO, null);
+				.getString(ServiceConstants.KeyProjectNo, null);
 	}
 
 	public void saveProjectNo(String projectNo) {
 		SharedPreferences.Editor prefEditor = sharedPreference.edit();
-		prefEditor.putString(ServiceConstants.KEY_PROJECT_NO, projectNo);
+		prefEditor.putString(ServiceConstants.KeyProjectNo, projectNo);
 		prefEditor.commit();
 	}
 }

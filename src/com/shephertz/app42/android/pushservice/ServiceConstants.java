@@ -6,11 +6,9 @@ public class ServiceConstants {
 	 static final String NotificationMessage = "message";
 	 static final String PushEnable = "pushStatus";
 	 static	 final String AppName="PushUnityNotification";
-	 
-	 static final String KEY_API="apiKey";
-	 static final String KEY_SECRET="secretKey";
-	 static final String KEY_USER="userId";
-	 static final String KEY_PROJECT_NO="projectNo";
-	 static final String KEY_GAME_OBJECT="gameObject";
-	 static final String KEY_UNITY_METHOD="callBackMethod";
+	
+	 static final String KeyProjectNo="projectNo";
+	 static final String KeyGameObject="gameObject";
+	 static final String KeyUnityMessage="callBackMessage";
+	 static final String KeyUnityRegistration="callBackregister";
 }
