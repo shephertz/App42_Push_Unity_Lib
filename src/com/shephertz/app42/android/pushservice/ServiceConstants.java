@@ -11,4 +11,5 @@ public class ServiceConstants {
 	 static final String KeyGameObject="gameObject";
 	 static final String KeyUnityMessage="callBackMessage";
 	 static final String KeyUnityRegistration="callBackregister";
+	 static final String KeyLastMessage="lastMessage";
 }

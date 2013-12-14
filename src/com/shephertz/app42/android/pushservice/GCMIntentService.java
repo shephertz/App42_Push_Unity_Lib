@@ -45,16 +45,16 @@ public class GCMIntentService extends GCMBaseIntentService {
 		displayMessage(context, message);
 		generateNotification(context, message);
 		try {
+			ServiceContext.instance(context).saveLastMessage(message);
 			App42Service.messageReceived(message,
 					ServiceContext.instance(context).getCallBackMessage(),
 					ServiceContext.instance(context).getGameObject());
-		} catch (Exception e) {
-		   Log.e("App42 Exception", e.getMessage());
+		} catch (Throwable e) {
+			Log.e("App42 Exception", e.getMessage());
+			
 		}
 		// TODO: handle exception
 	}
-
-	
 
 	@Override
 	protected void onDeletedMessages(Context context, int total) {
@@ -68,7 +68,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 	protected void onRegistered(Context context, String registrationId) {
 
 		Log.i(TAG, "Device registered: regId = " + registrationId);
-		App42Service.messageReceived(registrationId, ServiceContext.instance(context).getCallBackRegister(), 
+		App42Service.messageReceived(registrationId,
+				ServiceContext.instance(context).getCallBackRegister(),
 				ServiceContext.instance(context).getGameObject());
 
 	}
@@ -110,12 +111,15 @@ public class GCMIntentService extends GCMBaseIntentService {
 				notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 		Notification notification = new NotificationCompat.Builder(context)
-				.setContentTitle(
-						ServiceContext.instance(context).getGameObject())
-				.setContentText(message).setContentIntent(intent)
-				.setSmallIcon(android.R.drawable.ic_dialog_info).setWhen(when)
-				.setNumber(++msgCount).setLargeIcon(getBitmapFromAssets())
-				.setLights(Color.YELLOW, 1, 2).setAutoCancel(true).build();
+				.setContentTitle(ServiceContext.instance(context).getGameObject())
+				.setContentText(message).
+				 setContentIntent(intent)
+				.setSmallIcon(android.R.drawable.ic_dialog_info)
+				.setWhen(when)
+				.setNumber(++msgCount)
+				.setLargeIcon(getBitmapFromAssets())
+				.setLights(Color.YELLOW, 1, 2)
+				.setAutoCancel(true).build();
 
 		notification.defaults |= Notification.DEFAULT_SOUND;
 		notification.defaults |= Notification.DEFAULT_VIBRATE;

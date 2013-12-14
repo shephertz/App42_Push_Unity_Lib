@@ -56,4 +56,15 @@ public class ServiceContext {
 		prefEditor.putString(ServiceConstants.KeyProjectNo, projectNo);
 		prefEditor.commit();
 	}
+	
+	public String getLastMessage() {
+		return sharedPreference
+				.getString(ServiceConstants.KeyLastMessage, "");
+	}
+
+	public void saveLastMessage(String projectNo) {
+		SharedPreferences.Editor prefEditor = sharedPreference.edit();
+		prefEditor.putString(ServiceConstants.KeyLastMessage, projectNo);
+		prefEditor.commit();
+	}
 }

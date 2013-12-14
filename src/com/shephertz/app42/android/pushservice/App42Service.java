@@ -46,13 +46,13 @@ public class App42Service {
 		if (deviceId.equals("")) {
 			try {
 				GCMRegistrar.register(context, serviceContext.getProjectNo());
-			} catch (Exception e) {
+			} catch (Throwable e) {
 				e.printStackTrace();
 			}
 		} else {
 			try {
 				messageReceived(deviceId, serviceContext.getCallBackRegister(), serviceContext.getGameObject());
-			} catch (Exception ex) {
+			} catch (Throwable ex) {
 				ex.printStackTrace();
 			}
 		}
@@ -78,7 +78,19 @@ public class App42Service {
 	public void resetCount() {
 		GCMIntentService.msgCount = 0;
 	}
-
+	
+	/*
+	 * This function calls from Unity to show last PushMessage to user.
+	 */
+	public void getLastMessage(){
+		try {
+			GCMIntentService.msgCount = 0;
+			messageReceived(serviceContext.getLastMessage(), serviceContext.getCallBackMessage(), serviceContext.getGameObject());
+		} catch (Throwable ex) {
+			ex.printStackTrace();
+		}
+	}
+	
 	public void registerForNotification(String callBackMessage,
 			String gameObjectName,String callBackRegister) {
 		serviceContext.saveUnityInfo(callBackMessage, gameObjectName,callBackRegister);
