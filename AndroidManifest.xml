@@ -29,7 +29,7 @@
         android:icon="@drawable/app_icon"
         android:label="@string/app_name" >
         <receiver
-            android:name="com.google.android.gcm.GCMBroadcastReceiver"
+            android:name="com.shephertz.app42.android.pushservice.App42PushReciver"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
 
@@ -38,6 +38,10 @@
                 <!-- Receives the registration id. -->
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
+                 <!--
+           For customization change category "com.shephertz.app42.android.pushservice" with Your application packageName Here
+
+        -->
                 <category android:name="com.shephertz.app42.android.pushservice" />
             </intent-filter>
         </receiver>
@@ -49,7 +53,7 @@
           By default, it must be named .GCMIntentService, unless the
           application uses a custom BroadcastReceiver that redefines its name.
         -->
-        <service android:name="com.shephertz.app42.android.pushservice.GCMIntentService" >
+        <service android:name="com.shephertz.app42.android.pushservice.App42PushService" >
         </service>
     </application>
 

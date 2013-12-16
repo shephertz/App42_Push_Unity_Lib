@@ -20,13 +20,13 @@ import android.util.Log;
 
 import com.google.android.gcm.GCMBaseIntentService;
 
-public class GCMIntentService extends GCMBaseIntentService {
+public class App42PushService extends GCMBaseIntentService {
 
 	public static int msgCount = 0;
 	public static String notificationMessage = "";
 	static String projectNo = "<Your Project No>";
 
-	public GCMIntentService() {
+	public App42PushService() {
 		super(projectNo);
 	}
 

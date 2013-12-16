@@ -67,7 +67,7 @@ public class App42Service {
 	
 	
 	public void setProjectNo(String projectNo) {
-		GCMIntentService.projectNo = projectNo;
+		App42PushService.projectNo = projectNo;
 		serviceContext.saveProjectNo(projectNo);
 	}
 
@@ -76,7 +76,7 @@ public class App42Service {
 	 * function reset PushMessage Count to zero
 	 */
 	public void resetCount() {
-		GCMIntentService.msgCount = 0;
+		App42PushService.msgCount = 0;
 	}
 	
 	/*
@@ -84,7 +84,7 @@ public class App42Service {
 	 */
 	public void getLastMessage(){
 		try {
-			GCMIntentService.msgCount = 0;
+			App42PushService.msgCount = 0;
 			messageReceived(serviceContext.getLastMessage(), serviceContext.getCallBackMessage(), serviceContext.getGameObject());
 		} catch (Throwable ex) {
 			ex.printStackTrace();
